@@ -11,7 +11,7 @@ An **enterprise-style portfolio project** for exploring sales, revenue, customer
 - A reporting-friendly star schema: `fact_sales`, `dim_date`, `dim_customer`, and `dim_product`.
 - Python KPI helpers for revenue, gross profit, orders, customers, margin, and dimension-level analysis.
 - PostgreSQL reference DDL plus analytical SQL using CTEs, window functions, rankings, cumulative revenue, month-over-month growth, and cohort activity.
-- Power BI-ready CSV outputs and DAX measures for executive, sales, customer, product, and regional dashboards.
+- Power BI-ready CSV outputs, DAX measures, and a step-by-step implementation guide for executive, sales, customer, product, and regional dashboards.
 - Standard-library unit tests and GitHub Actions CI.
 
 ## Architecture
@@ -44,7 +44,7 @@ PYTHONPATH=src python -m sales_intelligence.pipeline
 PYTHONPATH=src python -m unittest discover -s tests -v
 ```
 
-The pipeline writes CSV files to `data/processed/`. Import these into Power BI, relate `fact_sales` to its dimensions, and use [measures.dax](powerbi/measures.dax).
+The pipeline writes CSV files to `data/processed/`. Build the report from the exact current schema with [the Power BI implementation guide](docs/power_bi_implementation_guide.md) and [measures.dax](powerbi/measures.dax). A `.pbix` is not included because it was not created in Power BI Desktop.
 
 ## SQL analytics
 
@@ -60,7 +60,7 @@ Run [01_schema.sql](sql/01_schema.sql) in PostgreSQL after loading the generated
 
 ## Data and limitations
 
-The data generator intentionally creates plausible but fictional records. It does not model real-world seasonality, returns, taxes, currency conversion, or slowly changing dimensions. The PostgreSQL layer is a reference schema and SQL implementation; a live database and Power BI `.pbix` file are intentionally not claimed or included.
+The data generator intentionally creates plausible but fictional records. It does not model real-world seasonality, returns, taxes, currency conversion, or slowly changing dimensions. The PostgreSQL layer is a reference schema and SQL implementation; a live database, `.pbix` file, scheduled refresh, or dashboard deployment are intentionally not claimed or included.
 
 ## Quality and security
 
