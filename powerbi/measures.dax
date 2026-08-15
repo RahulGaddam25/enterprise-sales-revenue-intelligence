@@ -1,0 +1,11 @@
+// Measures for the generated star schema. Treat all values as synthetic portfolio data.
+Net Revenue = SUM(fact_sales[net_revenue])
+Gross Profit = SUM(fact_sales[gross_profit])
+Total Cost = SUM(fact_sales[total_cost])
+Orders = DISTINCTCOUNT(fact_sales[order_id])
+Customers = DISTINCTCOUNT(fact_sales[customer_id])
+Average Order Value = DIVIDE([Net Revenue], [Orders])
+Profit Margin % = DIVIDE([Gross Profit], [Net Revenue])
+Revenue Previous Month = CALCULATE([Net Revenue], DATEADD(dim_date[date], -1, MONTH))
+MoM Revenue Growth % = DIVIDE([Net Revenue] - [Revenue Previous Month], [Revenue Previous Month])
+Revenue YTD = TOTALYTD([Net Revenue], dim_date[date])
