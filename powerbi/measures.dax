@@ -1,11 +1,32 @@
-// Measures for the generated star schema. Treat all values as synthetic portfolio data.
-Net Revenue = SUM(fact_sales[net_revenue])
-Gross Profit = SUM(fact_sales[gross_profit])
+// Enterprise Sales & Revenue Intelligence — Power BI measures
+// All measures operate on generated synthetic portfolio data.
+
+// Executive overview
+Total Revenue = SUM(fact_sales[net_revenue])
+Total Profit = SUM(fact_sales[gross_profit])
 Total Cost = SUM(fact_sales[total_cost])
-Orders = DISTINCTCOUNT(fact_sales[order_id])
-Customers = DISTINCTCOUNT(fact_sales[customer_id])
-Average Order Value = DIVIDE([Net Revenue], [Orders])
-Profit Margin % = DIVIDE([Gross Profit], [Net Revenue])
-Revenue Previous Month = CALCULATE([Net Revenue], DATEADD(dim_date[date], -1, MONTH))
-MoM Revenue Growth % = DIVIDE([Net Revenue] - [Revenue Previous Month], [Revenue Previous Month])
-Revenue YTD = TOTALYTD([Net Revenue], dim_date[date])
+Total Orders = DISTINCTCOUNT(fact_sales[order_id])
+Total Customers = DISTINCTCOUNT(fact_sales[customer_id])
+Average Order Value = DIVIDE([Total Revenue], [Total Orders])
+Profit Margin % = DIVIDE([Total Profit], [Total Revenue])
+
+// Sales trend and growth
+Revenue Previous Month = CALCULATE([Total Revenue], DATEADD(dim_date[date], -1, MONTH))
+Revenue MoM Growth % = DIVIDE([Total Revenue] - [Revenue Previous Month], [Revenue Previous Month])
+Revenue Previous Year = CALCULATE([Total Revenue], SAMEPERIODLASTYEAR(dim_date[date]))
+Revenue YoY Growth % = DIVIDE([Total Revenue] - [Revenue Previous Year], [Revenue Previous Year])
+Revenue YTD = TOTALYTD([Total Revenue], dim_date[date])
+Order Volume = [Total Orders]
+
+// Customer analysis
+Active Customers = DISTINCTCOUNT(fact_sales[customer_id])
+Customer Revenue Rank = RANKX(ALLSELECTED(dim_customer[customer_name]), [Total Revenue], , DESC, DENSE)
+Customer Average Order Value = DIVIDE([Total Revenue], [Total Orders])
+
+// Product analysis
+Product Revenue Rank = RANKX(ALLSELECTED(dim_product[product_name]), [Total Revenue], , DESC, DENSE)
+Product Profit Margin % = DIVIDE([Total Profit], [Total Revenue])
+
+// Regional analysis (region is intentionally retained in fact_sales in the current schema)
+Regional Revenue Rank = RANKX(ALLSELECTED(fact_sales[region]), [Total Revenue], , DESC, DENSE)
+Regional MoM Growth % = [Revenue MoM Growth %]
